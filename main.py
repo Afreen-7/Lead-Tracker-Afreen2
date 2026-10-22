@@ -1,29 +1,59 @@
+import csv
+import os
 import uuid
+import phonenumbers
+from validators import is_valid_email, is_valid_phone
+from phonenumbers import carrier, geocoder, timezone
 
-leads = []
+DATA_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "leads.csv")
+FIELDS = ["id", "first_name", "last_name", "phone_number", "email", "source", "status"]
 
-SOURCES = ("website", "bayut", "propertyfinder")
+def save_leads():
+    with open(DATA_FILE, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=FIELDS)
+        writer.writeheader()
+        writer.writerows(leads)
+
+def load_leads():
+    if not os.path.exists(DATA_FILE):
+        return []
+    with open(DATA_FILE, "r", newline="", encoding="utf-8") as f:
+        return list(csv.DictReader(f))
+
+leads = load_leads()
+
+
+SOURCES = ("website", "bayut", "property finder")
 STATUSES = ("new", "contacted", "qualified", "won", "lost")
+TRANSITIONS = {
+    "new": ["contacted"],
+    "contacted": ["qualified", "lost"],
+    "qualified": ["won", "lost"],
+    "won": [],
+    "lost": [],
+}
 
 def add_lead():
     first_name = input("Enter your first name; ")
     last_name = input("Enter your last name: ")    
     phone_number = input("Enter your phone number: ")
-    source = input("Enter source (Website, Property Finder, Bayut): ").strip().lower()
+    source = input(f"Enter source ({', '.join(s.title() for s in SOURCES)}): ").strip().lower()
+
+  
+    cleaned_phone = is_valid_phone(phone_number)
+    if not cleaned_phone:
+        print("Invalid phone number.")
+        return
+    phone_number = cleaned_phone
+
     email = input("Enter your email: ")
-    if not first_name or not last_name or not phone_number or not email:
-        print("First_name, Last_name, phone, email are required")
+    cleaned = is_valid_email(email)
+
+    if not cleaned:
+        print("Invalid email")
         return
 
-    phone_digits = phone_number[1:] if phone_number.startswith("+") else phone_number
-    
-    if not phone_digits or not phone_digits.isdigit():
-        print("Invalid phone. Use digits only, with an optional + at the start.")
-        return
-
-    if email.count("@") != 1:
-        print("Invalid email. Email must contain exactly one @.")
-        return
+    email = cleaned     
 
     if source not in SOURCES:
         print("Invalid Source")
@@ -40,6 +70,7 @@ def add_lead():
     }
 
     leads.append(lead)
+    save_leads()                     
     print("lead successfully added")
     print(f"Lead Generated Successfuly ID: {lead['id']}")
 
@@ -49,71 +80,83 @@ def lead_list():
         print("No leads found.")
         return
 
-    print("-" * 145)
-    print(
-        f"{'ID':<38}"
-        f"{'FIRST NAME':<15}"
-        f"{'LAST NAME':<15}"
-        f"{'PHONE':<17}"
-        f"{'EMAIL':<28}"
-        f"{'SOURCE':<18}"
-        f"{'STATUS':<12}"
-    )
-    print("-" * 145)
+    headers = ["ID","First name","Last name","Email","Phone Number","Source","Status"]
+    keys = ["id", "first_name", "last_name", "phone_number", "email", "source", "status"]
+
+    widths = [
+        max(len(h), *(len(str(lead[k])) for lead in leads))
+        for h, k in zip(headers, keys)
+    ]
+
+    print(" | ".join(h.ljust(w) for h, w in zip(headers, widths)))
 
     for lead in leads:
-        print(
-            f"{lead['id']:<38}"
-            f"{lead['first_name']:<15}"
-            f"{lead['last_name']:<15}"
-            f"{lead['phone_number']:<17}"
-            f"{lead['email']:<28}"
-            f"{lead['source']:<18}"
-            f"{lead['status']:<12}"
-        )
-
-    print("-" * 145)
+        print(" | ".join(str(lead[k]).ljust(w) for k, w in zip(keys, widths)))
 
 def change_status():
-    lead_id = input("Enter lead ID")
+    email = input("Enter lead email: ").strip()
+    cleaned = is_valid_email(email)
 
-    for lead in leads:
-        if lead["id"] == lead_id:
-            status = input(" Enter status (new/contacted/qualified/won/lost):")
-                            
-        if status not in STATUSES:
-            print("invalid status")
-            return
-        
-        lead["status"] = status
-        print("status update sucessfully")
+    if not cleaned:
+        print("Invalid email")
         return
 
-    print("Lead Id not found")
+    for lead in leads:
+        if lead["email"] == cleaned:
+            current = lead["status"]
+            options = TRANSITIONS[current]
+
+            if not options:
+                print(f"Lead is already '{current}'. Status can't be changed.")
+                return
+
+            print(f"Current status: {current}")
+            status = input(f"Enter new status ({'/'.join(options)}): ").strip().lower()
+
+            if status not in options:
+                print(f"Invalid status. From '{current}' you can only move to: {', '.join(options)}")
+                return
+
+            lead["status"] = status
+            save_leads()                     
+            print("Status updated successfully")
+            return
+
+    print("Lead not found")
 
 
 def searh_lead():
-    first_name = input("enter name for search").lower()
-    found = False
+    email = input("enter email to search: ").lower()
+    cleaned = is_valid_email(email)
+
+    if not cleaned:
+        print("Invalid email")
+        return
+
 
     for lead in leads:
-            if first_name in lead["first_name"].lower():
+            if lead["email"] == cleaned:
                 print(lead)
-                found = True
-
-    if not found:
-        print("lead not found")
+                return
+    
+    print("lead not found")
 
 def delete_lead():
-    lead_id = input("Enter thelead ID to delete")
+    email = input("Enter your email to delete: ").strip()
+    cleaned = is_valid_email(email)
 
+    if not cleaned:
+        print("Invalid email")
+        return
+    
     for lead in leads:
-        if lead["id"] == lead_id:
+        if lead["email"] == cleaned:
             leads.remove(lead)
+            save_leads()
             print("lead remove successfully")
             return 
     
-    print("lead ID not found")
+    print("Email not found")
 
 
 while True:
