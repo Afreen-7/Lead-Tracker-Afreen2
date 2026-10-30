@@ -1,0 +1,173 @@
+[
+    {
+        "budget": {
+            "min": 250000,
+            "max": 260000
+        },
+        "category": "studio",
+        "interested_locations": [
+            {
+                "area": "Dubai Creek Harbour",
+                "community": "Dubai Creek Harbour"
+            },
+            {
+                "area": "Business Bay",
+                "community": "Business Bay"
+            },
+            {
+                "area": "Palm Jumeirah",
+                "community": "Palm Jumeirah"
+            }
+        ],
+        "id": "19d7ffeb-f793-47d4-b3e1-b7503d7ccfd4",
+        "first_name": "AFI",
+        "last_name": "TQ",
+        "phone_number": "+923197830000",
+        "source": "property finder",
+        "email": "afreen@gmail.com",
+        "status": "new"
+    },
+    {
+        "budget": {
+            "min": 25670,
+            "max": 27000
+        },
+        "category": "1 bed",
+        "interested_locations": [
+            {
+                "area": "Dubailand",
+                "community": "Dubailand"
+            },
+            {
+                "area": "Arjan",
+                "community": "Arjan"
+            },
+            {
+                "area": "Al Barsha South",
+                "community": "Al Barsha South"
+            }
+        ],
+        "id": "bd17e143-4d05-467a-9bfc-36280274ba60",
+        "first_name": "afi",
+        "last_name": "tq",
+        "phone_number": "+923198723333",
+        "source": "bayut",
+        "email": "afi@gmail.com",
+        "status": "contacted"
+    },
+    {
+        "budget": {
+            "min": 500000,
+            "max": 6500000
+        },
+        "category": "2 bed",
+        "interested_locations": [
+            {
+                "area": "Dubai Creek Harbour",
+                "community": "Dubai Creek Harbour"
+            },
+            {
+                "area": "Dubailand",
+                "community": "Dubailand"
+            },
+            {
+                "area": "Downtown Dubai",
+                "community": "Downtown Dubai"
+            }
+        ],
+        "tag": "hot",
+        "lowest_price": 950000,
+        "follow_up": [],
+        "id": "666e0602-36cc-4e54-9231-d19ecc131b93",
+        "first_name": "abdul",
+        "last_name": "wahab",
+        "phone_number": "+923213456745",
+        "source": "website",
+        "email": "abdul@gmail.com",
+        "status": "new"
+    },
+    {
+        "middle_name": "",
+        "budget": {
+            "min": 260000,
+            "max": 2750000
+        },
+        "category": "1 bed",
+        "interested_locations": [
+            {
+                "area": "Arjan",
+                "community": "Arjan"
+            },
+            {
+                "area": "Downtown Dubai",
+                "community": "Downtown Dubai"
+            }
+        ],
+        "tag": "hot",
+        "lowest_price": 750000,
+        "follow_up": [],
+        "id": "bc0912dc-c89a-410f-ba0a-54d22eb05e7c",
+        "first_name": "Afr",
+        "last_name": "",
+        "phone_number": "+923187831567",
+        "source": "website",
+        "email": "afreen123@gmail.com",
+        "status": "new"
+    },
+    {
+        "middle_name": "",
+        "budget": {
+            "min": 2550000,
+            "max": 2750000
+        },
+        "category": "studio",
+        "interested_locations": [
+            {
+                "area": "Dubai Marina",
+                "community": "Dubai Marina"
+            },
+            {
+                "area": "Arjan",
+                "community": "Arjan"
+            }
+        ],
+        "tag": "hot",
+        "lowest_price": 550000,
+        "follow_up": [],
+        "id": "9d209ed4-24a5-4c5d-8f1f-d6e71669deb4",
+        "first_name": "Wahab",
+        "last_name": "",
+        "phone_number": "+923411234567",
+        "source": "website",
+        "email": "wahab@gmail.com",
+        "status": "new"
+    },
+    {
+        "middle_name": "",
+        "budget": {
+            "min": 2450000,
+            "max": 2780000
+        },
+        "category": "1 bed",
+        "interested_locations": [
+            {
+                "area": "Dubai Marina",
+                "community": "Dubai Marina"
+            },
+            {
+                "area": "Al Barsha South",
+                "community": "Al Barsha South"
+            }
+        ],
+        "tag": "hot",
+        "lowest_price": 680000,
+        "follow_up": [],
+        "id": "459cd238-5cc2-4c47-a150-81c2520f6cb1",
+        "first_name": "Wahab",
+        "last_name": "",
+        "phone_number": "+923314567893",
+        "source": "website",
+        "email": "wahab123@gmail.com",
+        "status": "new"
+    }
+]

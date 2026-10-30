@@ -1,0 +1,178 @@
+{
+  "currency": "AED",
+  "note": "Illustrative sample data only; project names and prices are not verified live listings.",
+  "off_plan_projects": [
+    {
+      "project_name": "Creek Vista Residences",
+      "starting_price": 650000,
+      "prices_by_category": {
+        "studio": 650000,
+        "1_bed": 850000,
+        "2_beds": 1250000,
+        "3_beds": 1850000
+      },
+      "location": {
+        "city": "Dubai",
+        "area": "Dubai Creek Harbour",
+        "country": "United Arab Emirates",
+        "community": "Dubai Creek Harbour",
+        "subcommunity": "Creek Island"
+      }
+    },
+    {
+      "project_name": "Marina Horizon",
+      "starting_price": 720000,
+      "prices_by_category": {
+        "studio": 720000,
+        "1_bed": 980000,
+        "2_beds": 1450000,
+        "3_beds": 2100000
+      },
+      "location": {
+        "city": "Dubai",
+        "area": "Dubai Marina",
+        "country": "United Arab Emirates",
+        "community": "Dubai Marina",
+        "subcommunity": "Marina Promenade"
+      }
+    },
+    {
+      "project_name": "Garden Gate Residences",
+      "starting_price": 480000,
+      "prices_by_category": {
+        "studio": 480000,
+        "1_bed": 620000,
+        "2_beds": 950000,
+        "3_beds": 1400000
+      },
+      "location": {
+        "city": "Dubai",
+        "area": "Dubailand",
+        "country": "United Arab Emirates",
+        "community": "Dubailand",
+        "subcommunity": "Villanova"
+      }
+    },
+    {
+      "project_name": "Skyline Bay Apartments",
+      "starting_price": 800000,
+      "prices_by_category": {
+        "studio": 800000,
+        "1_bed": 1100000,
+        "2_beds": 1600000,
+        "3_beds": 2350000
+      },
+      "location": {
+        "city": "Dubai",
+        "area": "Dubai Islands",
+        "country": "United Arab Emirates",
+        "community": "Dubai Islands",
+        "subcommunity": "Island A"
+      }
+    },
+    {
+      "project_name": "Parkside Central",
+      "starting_price": 550000,
+      "prices_by_category": {
+        "studio": 550000,
+        "1_bed": 750000,
+        "2_beds": 1150000,
+        "3_beds": 1700000
+      },
+      "location": {
+        "city": "Dubai",
+        "area": "Arjan",
+        "country": "United Arab Emirates",
+        "community": "Arjan",
+        "subcommunity": null
+      }
+    }
+  ],
+  "ready_projects": [
+    {
+      "project_name": "Downtown Pearl Apartments",
+      "starting_price": 700000,
+      "prices_by_category": {
+        "studio": 700000,
+        "1_bed": 900000,
+        "2_beds": 1350000,
+        "3_beds": 1950000
+      },
+      "location": {
+        "city": "Dubai",
+        "area": "Downtown Dubai",
+        "country": "United Arab Emirates",
+        "community": "Downtown Dubai",
+        "subcommunity": "Opera District"
+      }
+    },
+    {
+      "project_name": "Marina View Towers",
+      "starting_price": 850000,
+      "prices_by_category": {
+        "studio": 850000,
+        "1_bed": 1200000,
+        "2_beds": 1750000,
+        "3_beds": 2500000
+      },
+      "location": {
+        "city": "Dubai",
+        "area": "Dubai Marina",
+        "country": "United Arab Emirates",
+        "community": "Dubai Marina",
+        "subcommunity": "Jumeirah Living Marina Gate"
+      }
+    },
+    {
+      "project_name": "Green Square Residences",
+      "starting_price": 520000,
+      "prices_by_category": {
+        "studio": 520000,
+        "1_bed": 680000,
+        "2_beds": 1020000,
+        "3_beds": 1500000
+      },
+      "location": {
+        "city": "Dubai",
+        "area": "Al Barsha South",
+        "country": "United Arab Emirates",
+        "community": "Al Barsha South",
+        "subcommunity": "Dubai Science Park"
+      }
+    },
+    {
+      "project_name": "City Centre Living",
+      "starting_price": 780000,
+      "prices_by_category": {
+        "studio": 780000,
+        "1_bed": 1050000,
+        "2_beds": 1550000,
+        "3_beds": 2250000
+      },
+      "location": {
+        "city": "Dubai",
+        "area": "Business Bay",
+        "country": "United Arab Emirates",
+        "community": "Business Bay",
+        "subcommunity": "Bay Square"
+      }
+    },
+    {
+      "project_name": "Palm Court Apartments",
+      "starting_price": 610000,
+      "prices_by_category": {
+        "studio": 610000,
+        "1_bed": 820000,
+        "2_beds": 1220000,
+        "3_beds": 1800000
+      },
+      "location": {
+        "city": "Dubai",
+        "area": "Palm Jumeirah",
+        "country": "United Arab Emirates",
+        "community": "Palm Jumeirah",
+        "subcommunity": "Golden Mile"
+      }
+    }
+  ]
+}
