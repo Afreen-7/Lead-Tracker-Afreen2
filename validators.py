@@ -1,6 +1,7 @@
 import phonenumbers
+from email_validator import EmailNotValidError, validate_email
 from phonenumbers import NumberParseException
-from email_validator import validate_email, EmailNotValidError
+
 
 def is_valid_email(email):
     try:
@@ -9,7 +10,7 @@ def is_valid_email(email):
     except EmailNotValidError:
         return None
 
-def is_valid_phone(phone, region="PK"):
+def is_valid_phone(phone, region="AE"):
     try:
         num = phonenumbers.parse(phone, region)
         if phonenumbers.is_valid_number(num):

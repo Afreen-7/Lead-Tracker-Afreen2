@@ -1,15 +1,16 @@
 import json
-import csv
 import os
 import uuid
-import phonenumbers
+
 from validators import is_valid_email, is_valid_phone
 
 DATA_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "leads.json")
 
 def save_leads():
-    with open(DATA_FILE, "w", encoding="utf-8") as f:
+    tmp = DATA_FILE + ".tmp"
+    with open(tmp, "w", encoding="utf-8") as f:
         json.dump(leads, f, indent=4)
+    os.replace(tmp, DATA_FILE)
 
 
 def load_leads():
@@ -19,31 +20,29 @@ def load_leads():
         with open(DATA_FILE, "r", encoding="utf-8") as f:
             return json.load(f)
     except json.JSONDecodeError:
-        return []
-
+        raise SystemExit(f"{DATA_FILE} is broken. Fix or restore it, then run again.")
+    
 leads = load_leads()
 
 
 PROJECTS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "property_locations.json")
 
-def load_locations():
-    with open(PROJECTS_FILE, "r", encoding="utf-8") as f:
-        data = json.load(f)
+def load_locations(projects):
     seen = []
-    for key in ("off_plan_projects", "ready_projects"):
-        for project in data.get(key, []):
-            loc = project["location"]
-            pair = (loc["area"], loc["community"])
-            if pair not in seen:
-                seen.append(pair)
-    return seen
 
-locations = load_locations()
+    for project in projects:
+        loc = project["location"]
+        pair = (loc["area"], loc["community"])
+
+        if pair not in seen:
+            seen.append(pair)
+
+    return seen
 
 SOURCES = ("website", "bayut", "property finder")
 STATUSES = ("new", "contacted", "qualified", "won", "lost")
 TRANSITIONS = {
-    "new": ["contacted"],
+    "new": ["contacted", "lost"],
     "contacted": ["qualified", "lost"],
     "qualified": ["won", "lost"],
     "won": [],
@@ -102,7 +101,7 @@ def choose_locations(locations):
             print("Please enter numbers only.")
             continue
 
-        numbers = sorted(set(int(p) for p in parts))
+        numbers = sorted({int(p) for p in parts})
 
         if any(n < 1 or n > len(locations) for n in numbers):
             print(f"Numbers must be between 1 and {len(locations)}.")
@@ -129,11 +128,17 @@ CATEGORY_KEYS = {
 }
 
 def load_projects():
-    with open(PROJECTS_FILE, "r", encoding="utf-8") as f:
-        data = json.load(f)
+    try:
+        with open(PROJECTS_FILE, "r", encoding="utf-8") as f:
+            data = json.load(f)
+
+    except FileNotFoundError:
+        raise SystemExit("property_locations.json not found")
+
     return data.get("off_plan_projects", []) + data.get("ready_projects", [])
 
 projects = load_projects()
+locations = load_locations(projects)
 
 def get_lowest_price(category, interested_locations):
     key = CATEGORY_KEYS[category]
@@ -161,39 +166,43 @@ def get_tag(budget, category, interested_locations):
     return "cold", lowest_price
 
 def add_lead():
-    full_name, first_name, middle_name, last_name = ask_name()
-    phone_number = input("Enter your phone number: ")
+    _full_name, first_name, middle_name, last_name = ask_name()
     source = input(f"Enter source ({', '.join(s.title() for s in SOURCES)}): ").strip().lower()
-    
-  
-    cleaned_phone = is_valid_phone(phone_number)
-    if not cleaned_phone:
-        print("Invalid phone number.")
+
+    if source not in SOURCES:
+        print("Invalid Source")
         return
-    phone_number = cleaned_phone
+  
+    while True:
+        phone_number = input("Enter your phone number: ").strip()
+
+        cleaned_phone = is_valid_phone(phone_number)
+
+        if not cleaned_phone:
+            print("Invalid phone number.")
+            continue
+
+        phone_number = cleaned_phone
+        break
 
     while True:
         email = input("Enter your email: ")
         cleaned = is_valid_email(email)
         if not cleaned:
             print("Invalid email")
-            return
+            continue
         if any(lead.get("email", "").lower() == cleaned.lower() for lead in leads):
             print("This email is already used. Try with a new email.")
             continue
         email = cleaned
         break     
 
-    if source not in SOURCES:
-        print("Invalid Source")
-        return
 
     budget = ask_budget()
     category = ask_category()
     interested_locations = choose_locations(locations)
     tag, lowest_price = get_tag(budget, category, interested_locations)
-    follow_up = FOLLOW_UP_CHANNELS if tag == "cold" else []
-    
+    follow_up = list(FOLLOW_UP_CHANNELS) if tag == "cold" else []    
     lead = {
         "middle_name": middle_name,
         "budget": budget,
@@ -267,7 +276,7 @@ def change_status():
     print("Lead not found")
 
 
-def searh_lead():
+def search_lead():
     email = input("enter email to search: ").lower()
     cleaned = is_valid_email(email)
 
@@ -295,35 +304,37 @@ def delete_lead():
         if lead["email"] == cleaned:
             leads.remove(lead)
             save_leads()
-            print("lead remove successfully")
+            print("lead removed successfully")
             return 
     
     print("Email not found")
 
+def main():
+    while True:
+        print("\n=== PROPERTY LEAD TRACKER ===")
+        print("1. Add Lead")
+        print("2. List Leads")
+        print("3. Search Lead by Email")
+        print("4. Change Lead Status")
+        print("5. Delete Lead by Email")
+        print("6. Quit")
 
-while True:
-    print("\n=== PROPERTY LEAD TRACKER ===")
-    print("1. Add Lead")
-    print("2. List Leads")
-    print("3. Search Lead by Name")
-    print("4. Change Lead Status")
-    print("5. Delete Lead by ID")
-    print("6. Quit")
+        choice = input("Choose an option: ").strip()
 
-    choice = input("Choose an option: ").strip()
-
-    if choice == "1":
-        add_lead()
-    elif choice == "2":
-        lead_list()
-    elif choice == "3":
-        searh_lead()
-    elif choice == "4":
-        change_status()
-    elif choice == "5":
-        delete_lead()
-    elif choice == "6":
-        print("Goodbye!")
-        break
-    else:
-        print("Invalid choice. Try again.")
+        if choice == "1":
+            add_lead()
+        elif choice == "2":
+            lead_list()
+        elif choice == "3":
+            search_lead()
+        elif choice == "4":
+            change_status()
+        elif choice == "5":
+            delete_lead()
+        elif choice == "6":
+            print("Goodbye!")
+            break
+        else:
+            print("Invalid choice. Try again.")
+if __name__ == "__main__":
+    main()
