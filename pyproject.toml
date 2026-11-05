@@ -1,17 +1,16 @@
+
 [project]
 name = "lead-tracker"
 version = "0.1.0"
-description = "Add your description here"
-readme = "README.md"
+description = "A Python-based Real Estate Lead Tracker"
 authors = [
     { name = "Afreen-7", email = "afreentariq@gmail.com" }
 ]
 requires-python = ">=3.14"
-dependencies = []
+dependencies = [
+    "email-validator>=2.3.0",
+    "phonenumbers",
+]
 
-[project.scripts]
-lead-tracker = "lead_tracker:main"
-
-[build-system]
-requires = ["uv_build>=0.13.1,<0.14.0"]
-build-backend = "uv_build"
+[tool.uv]
+package = false
