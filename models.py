@@ -1,6 +1,8 @@
 from enum import Enum
 import uuid
 
+SOURCES = ("website", "bayut", "property finder")
+CATEGORIES = ("studio", "1 bed", "2 bed", "3 bed")
 
 class LeadStatus(Enum):
     NEW = "new"

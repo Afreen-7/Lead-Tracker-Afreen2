@@ -3,8 +3,8 @@ class LeadService:
     HOT_PERCENT = 90
     WARM_PERCENT = 50
 
-    FOLLOW_UP_CHANNELS = ["email", "sms", "whatsapp"]
-
+    FOLLOW_UP_CHANNELS = ("email", "sms", "whatsapp")
+    
     def __init__(self, repository, catalog, email_validator, phone_validator):
         self._repository = repository
         self._catalog = catalog

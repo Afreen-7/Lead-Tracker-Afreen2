@@ -45,7 +45,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "email-validator", specifier = ">=2.3.0" },
-    { name = "phonenumbers" },
+    { name = "phonenumbers", specifier = ">=9.0" },
 ]
 
 [[package]]
