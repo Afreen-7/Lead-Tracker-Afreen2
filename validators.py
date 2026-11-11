@@ -1,12 +1,9 @@
 from abc import ABC, abstractmethod
+
 import phonenumbers
 from email_validator import EmailNotValidError, validate_email
 from phonenumbers import NumberParseException
-
-
-class ValidationError(Exception):
-    pass
-
+from errors import ValidationError
 
 class Validator(ABC):
 
@@ -19,17 +16,20 @@ class EmailValidator(Validator):
 
     def validate(self, value):
         try:
-            result = validate_email(value, check_deliverability=False)
-            return result.normalized
-        except EmailNotValidError as e:
-            raise ValidationError(str(e))
+            result = validate_email(
+                value.strip(),
+                check_deliverability=False
+            )
+            return result.normalized.lower()
 
+        except (EmailNotValidError, TypeError, ValueError):
+            raise ValidationError("Invalid email.")
 
 class PhoneValidator(Validator):
 
     def __init__(self, region):
         self._region = region
-    
+
     def validate(self, value):
         try:
             num = phonenumbers.parse(value, self._region)
@@ -40,7 +40,8 @@ class PhoneValidator(Validator):
                     phonenumbers.PhoneNumberFormat.E164
                 )
 
-            raise ValidationError("Invalid phone number")
+            raise ValidationError("Invalid phone number.")
 
-        except NumberParseException as e:
-            raise ValidationError(str(e))
+        except NumberParseException:
+            raise ValidationError("Invalid phone number.")
+

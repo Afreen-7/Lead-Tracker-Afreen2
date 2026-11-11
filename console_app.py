@@ -1,3 +1,5 @@
+from errors import ValidationError
+
 class ConsoleApp:
 
     def __init__(self, service):

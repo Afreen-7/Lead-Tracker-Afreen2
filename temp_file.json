@@ -1,0 +1,42 @@
+[
+  {
+    "id": "58680b3e-aabd-4bf2-bace-21a124a51ad4",
+    "first_name": "Afia",
+    "middle_name": null,
+    "last_name": "Tahir",
+    "phone": "03001234567",
+    "email": "Afia.test@gmail.com",
+    "source": "website",
+    "status": "new",
+    "budget_min": 50000,
+    "budget_max": 100000,
+    "category": "2 bed",
+    "interested_locations": [
+      "JVC",
+      "Dubai Marina"
+    ],
+    "tag": null,
+    "lowest_price": null,
+    "follow_up": null
+  },
+  {
+    "id": "c4059735-9e38-4f95-87d8-8c43400c71ba",
+    "first_name": "Afia",
+    "middle_name": null,
+    "last_name": "Tahir",
+    "phone": "03001234567",
+    "email": "Afia.test@gmail.com",
+    "source": "website",
+    "status": "new",
+    "budget_min": 50000,
+    "budget_max": 100000,
+    "category": "2 bed",
+    "interested_locations": [
+      "JVC",
+      "Dubai Marina"
+    ],
+    "tag": null,
+    "lowest_price": null,
+    "follow_up": null
+  }
+]

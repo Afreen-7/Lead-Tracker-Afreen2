@@ -1,8 +1,12 @@
 from enum import Enum
 import uuid
 
+from errors import ValidationError
+
+
 SOURCES = ("website", "bayut", "property finder")
 CATEGORIES = ("studio", "1 bed", "2 bed", "3 bed")
+
 
 class LeadStatus(Enum):
     NEW = "new"
@@ -12,13 +16,31 @@ class LeadStatus(Enum):
     LOST = "lost"
 
     def next_options(self):
-        pass
+        transitions = {
+            LeadStatus.NEW: (LeadStatus.CONTACTED,),
+
+            LeadStatus.CONTACTED: (
+                LeadStatus.QUALIFIED,
+                LeadStatus.LOST
+            ),
+
+            LeadStatus.QUALIFIED: (
+                LeadStatus.WON,
+                LeadStatus.LOST
+            ),
+
+            LeadStatus.WON: (),
+            LeadStatus.LOST: ()
+        }
+
+        return transitions[self]
 
     def can_move_to(self, status):
-        pass
+        return status in self.next_options()
 
 
 class Lead:
+
     def __init__(
         self,
         first_name,
@@ -37,81 +59,176 @@ class Lead:
         follow_up=None,
         lead_id=None
     ):
-        pass
+
+        if budget_max < budget_min:
+            raise ValidationError(
+                "Maximum budget cannot be less than minimum budget."
+            )
+
+        if source not in SOURCES:
+            raise ValidationError("Invalid lead source.")
+
+        if category not in CATEGORIES:
+            raise ValidationError("Invalid property category.")
+
+        if isinstance(status, str):
+            try:
+                status = LeadStatus(status)
+            except ValueError:
+                raise ValidationError("Invalid lead status.")
+
+        if not isinstance(status, LeadStatus):
+            raise ValidationError("Invalid lead status.")
+
+        self._id = str(uuid.uuid4()) if lead_id is None else lead_id
+        self._first_name = first_name
+        self._middle_name = middle_name
+        self._last_name = last_name
+        self._phone = phone
+        self._email = email
+        self._source = source
+        self._status = status
+        self._budget_min = budget_min
+        self._budget_max = budget_max
+        self._category = category
+        self._interested_locations = tuple(interested_locations)
+        self._tag = tag
+        self._lowest_price = lowest_price
+        self._follow_up = follow_up
 
     @property
     def id(self):
-        pass
+        return self._id
 
     @property
     def first_name(self):
-        pass
+        return self._first_name
 
     @property
     def middle_name(self):
-        pass
+        return self._middle_name
 
     @property
     def last_name(self):
-        pass
+        return self._last_name
 
     @property
     def full_name(self):
-        pass
+        return " ".join(
+            name for name in (
+                self._first_name,
+                self._middle_name,
+                self._last_name
+            ) if name
+        )
 
     @property
     def phone(self):
-        pass
+        return self._phone
 
     @property
     def email(self):
-        pass
+        return self._email
 
     @property
     def source(self):
-        pass
+        return self._source
 
     @property
     def status(self):
-        pass
+        return self._status
 
     @property
     def budget_min(self):
-        pass
+        return self._budget_min
 
     @property
     def budget_max(self):
-        pass
+        return self._budget_max
 
     @property
     def category(self):
-        pass
+        return self._category
 
     @property
     def interested_locations(self):
-        pass
+        return self._interested_locations
 
     @property
     def tag(self):
-        pass
+        return self._tag
 
     @property
     def lowest_price(self):
-        pass
+        return self._lowest_price
 
     @property
     def follow_up(self):
-        pass
+        return self._follow_up
 
     def change_status(self, new_status):
-        pass
+
+        if isinstance(new_status, str):
+            try:
+                new_status = LeadStatus(new_status)
+            except ValueError:
+                raise ValidationError("Invalid lead status.")
+
+        if not isinstance(new_status, LeadStatus):
+            raise ValidationError("Invalid lead status.")
+
+        if not self._status.can_move_to(new_status):
+            raise ValidationError(
+                f"Cannot change status from "
+                f"{self._status.value} to {new_status.value}."
+            )
+
+        self._status = new_status
 
     def to_dict(self):
-        pass
+        return {
+            "id": self._id,
+            "first_name": self._first_name,
+            "middle_name": self._middle_name,
+            "last_name": self._last_name,
+            "phone": self._phone,
+            "email": self._email,
+            "source": self._source,
+            "status": self._status.value,
+            "budget_min": self._budget_min,
+            "budget_max": self._budget_max,
+            "category": self._category,
+            "interested_locations": list(self._interested_locations),
+            "tag": self._tag,
+            "lowest_price": self._lowest_price,
+            "follow_up": self._follow_up
+        }
 
     @classmethod
     def from_dict(cls, data):
-        pass
+        return cls(
+            lead_id=data.get("id"),
+            first_name=data["first_name"],
+            middle_name=data.get("middle_name"),
+            last_name=data["last_name"],
+            phone=data.get("phone"),
+            email=data.get("email"),
+            source=data["source"],
+            status=data["status"],
+            budget_min=data["budget_min"],
+            budget_max=data["budget_max"],
+            category=data["category"],
+            interested_locations=data["interested_locations"],
+            tag=data.get("tag"),
+            lowest_price=data.get("lowest_price"),
+            follow_up=data.get("follow_up")
+        )
 
     def __str__(self):
-        pass
+        return (
+            f"Lead: {self.full_name} | "
+            f"Phone: {self._phone} | "
+            f"Email: {self._email} | "
+            f"Status: {self._status.value} | "
+            f"Budget: {self._budget_min}-{self._budget_max}"
+        )
