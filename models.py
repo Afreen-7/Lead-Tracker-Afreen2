@@ -211,12 +211,18 @@ class Lead:
             first_name=data["first_name"],
             middle_name=data.get("middle_name"),
             last_name=data["last_name"],
-            phone=data.get("phone"),
+            phone=data.get("phone", data.get("phone_number")),
+            budget_min=data.get(
+                "budget_min",
+                data.get("budget", {}).get("min")
+),
+            budget_max=data.get(
+                "budget_max",
+                data.get("budget", {}).get("max")
+),            
             email=data.get("email"),
             source=data["source"],
             status=data["status"],
-            budget_min=data["budget_min"],
-            budget_max=data["budget_max"],
             category=data["category"],
             interested_locations=data["interested_locations"],
             tag=data.get("tag"),
